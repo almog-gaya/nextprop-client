@@ -127,7 +127,6 @@
     "fraction.js": "^4.3.7",
     "fs-extra": "^10.1.0",
     "fs.realpath": "^1.0.0",
-    "fsevents": "^2.3.3",
     "function-bind": "^1.1.2",
     "function.prototype.name": "^1.1.8",
     "functions-have-names": "^1.2.3",
@@ -372,6 +371,9 @@
     "yocto-queue": "^0.1.0",
     "zod": "^3.24.2"
   },
+  "optionalDependencies": {
+    "fsevents": "^2.3.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "next dev",
@@ -384,6 +386,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.9.4",
     "@types/node": "22.13.5",
     "@types/react": "19.0.10"
   }
