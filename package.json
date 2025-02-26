@@ -4,6 +4,7 @@
   "description": "A Next.js application for property management with Go High Level integration.",
   "main": "next.config.js",
   "dependencies": {
+    "@hookform/resolvers": "^4.1.2",
     "acorn": "^8.14.0",
     "acorn-jsx": "^5.3.2",
     "acorn-node": "^1.8.2",
@@ -381,5 +382,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "22.13.5",
+    "@types/react": "19.0.10"
+  }
 }
