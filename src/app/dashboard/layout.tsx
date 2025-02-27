@@ -13,7 +13,9 @@ import {
   FiX,
   FiMessageSquare,
   FiPhoneCall,
-  FiMail
+  FiMail,
+  FiBarChart2,
+  FiTarget
 } from 'react-icons/fi'
 import { useAuth } from '@/lib/hooks/useAuth'
 
@@ -50,6 +52,8 @@ export default function DashboardLayout({
     { name: 'Messages', href: '/dashboard/messages', icon: FiMessageSquare },
     { name: 'Calls', href: '/dashboard/calls', icon: FiPhoneCall },
     { name: 'Email', href: '/dashboard/email', icon: FiMail },
+    { name: 'Analytics', href: '/dashboard/analytics', icon: FiBarChart2 },
+    { name: 'Strategies', href: '/dashboard/strategies', icon: FiTarget },
     { name: 'Settings', href: '/dashboard/settings', icon: FiSettings },
   ]
 
@@ -60,14 +64,14 @@ export default function DashboardLayout({
   // Show loading state
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen bg-gradient-to-br from-primary-50 to-white">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
       </div>
     )
   }
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-100">
+    <div className="h-screen flex overflow-hidden bg-gray-50">
       {/* Mobile sidebar */}
       <div
         className={`fixed inset-0 flex z-40 md:hidden ${
@@ -75,7 +79,7 @@ export default function DashboardLayout({
         } transition-opacity ease-linear duration-300`}
       >
         <div
-          className={`fixed inset-0 bg-gray-600 bg-opacity-75 ${
+          className={`fixed inset-0 bg-dark-700 bg-opacity-75 ${
             sidebarOpen ? 'opacity-100' : 'opacity-0'
           } transition-opacity ease-linear duration-300`}
           onClick={() => setSidebarOpen(false)}
@@ -84,7 +88,7 @@ export default function DashboardLayout({
         <div
           className={`relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          } transition ease-in-out duration-300 transform`}
+          } transition ease-in-out duration-300 transform shadow-lg`}
         >
           <div className="absolute top-0 right-0 -mr-12 pt-2">
             <button
@@ -97,26 +101,26 @@ export default function DashboardLayout({
             </button>
           </div>
 
-          <div className="flex-shrink-0 flex items-center px-4">
-            <h1 className="text-xl font-bold text-primary-600">NextProp.ai</h1>
+          <div className="flex-shrink-0 flex items-center px-6">
+            <h1 className="text-2xl font-bold text-primary-600 font-display">NextProp.ai</h1>
           </div>
-          <div className="mt-5 flex-1 h-0 overflow-y-auto">
-            <nav className="px-2 space-y-1">
+          <div className="mt-8 flex-1 h-0 overflow-y-auto">
+            <nav className="px-4 space-y-2">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className={`group flex items-center px-2 py-2 text-base font-medium rounded-md ${
+                  className={`group flex items-center px-4 py-3 text-base font-medium rounded-xl transition-all duration-200 ${
                     pathname === item.href
-                      ? 'bg-primary-50 text-primary-600'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-primary-50 text-primary-600 shadow-soft'
+                      : 'text-dark-500 hover:bg-gray-50 hover:text-primary-600'
                   }`}
                 >
                   <item.icon
-                    className={`mr-4 h-6 w-6 ${
+                    className={`mr-4 h-5 w-5 ${
                       pathname === item.href
                         ? 'text-primary-600'
-                        : 'text-gray-400 group-hover:text-gray-500'
+                        : 'text-dark-400 group-hover:text-primary-500'
                     }`}
                   />
                   {item.name}
@@ -124,17 +128,17 @@ export default function DashboardLayout({
               ))}
             </nav>
           </div>
-          <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+          <div className="flex-shrink-0 flex border-t border-gray-200 p-4 mx-4 mt-4">
             <button
               onClick={handleSignOut}
-              className="flex-shrink-0 group block w-full flex items-center"
+              className="flex-shrink-0 group block w-full flex items-center px-4 py-2 rounded-xl hover:bg-gray-50 transition-all duration-200"
             >
               <div className="flex items-center">
                 <div>
-                  <FiLogOut className="inline-block h-5 w-5 text-gray-400 group-hover:text-gray-500" />
+                  <FiLogOut className="inline-block h-5 w-5 text-dark-400 group-hover:text-primary-500" />
                 </div>
                 <div className="ml-3">
-                  <p className="text-base font-medium text-gray-700 group-hover:text-gray-900">
+                  <p className="text-base font-medium text-dark-500 group-hover:text-primary-600">
                     Sign Out
                   </p>
                 </div>
@@ -146,45 +150,45 @@ export default function DashboardLayout({
 
       {/* Desktop sidebar */}
       <div className="hidden md:flex md:flex-shrink-0">
-        <div className="flex flex-col w-64">
+        <div className="flex flex-col w-72">
           <div className="flex flex-col h-0 flex-1">
-            <div className="flex items-center h-16 flex-shrink-0 px-4 bg-white border-b border-gray-200">
-              <h1 className="text-xl font-bold text-primary-600">NextProp.ai</h1>
+            <div className="flex items-center h-20 flex-shrink-0 px-6 bg-white border-b border-gray-200">
+              <h1 className="text-2xl font-bold text-primary-600 font-display">NextProp.ai</h1>
             </div>
-            <div className="flex-1 flex flex-col overflow-y-auto bg-white">
-              <nav className="flex-1 px-2 py-4 space-y-1">
+            <div className="flex-1 flex flex-col overflow-y-auto bg-white shadow-soft">
+              <nav className="flex-1 px-4 py-6 space-y-2">
                 {navigation.map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+                    className={`group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
                       pathname === item.href
-                        ? 'bg-primary-50 text-primary-600'
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                        ? 'bg-primary-50 text-primary-600 shadow-soft'
+                        : 'text-dark-500 hover:bg-gray-50 hover:text-primary-600'
                     }`}
                   >
                     <item.icon
                       className={`mr-3 h-5 w-5 ${
                         pathname === item.href
                           ? 'text-primary-600'
-                          : 'text-gray-400 group-hover:text-gray-500'
+                          : 'text-dark-400 group-hover:text-primary-500'
                       }`}
                     />
                     {item.name}
                   </Link>
                 ))}
               </nav>
-              <div className="flex-shrink-0 flex border-t border-gray-200 p-4">
+              <div className="flex-shrink-0 flex border-t border-gray-200 p-4 mx-4 mt-4">
                 <button
                   onClick={handleSignOut}
-                  className="flex-shrink-0 w-full group block"
+                  className="flex-shrink-0 w-full group block px-4 py-2 rounded-xl hover:bg-gray-50 transition-all duration-200"
                 >
                   <div className="flex items-center">
                     <div>
-                      <FiLogOut className="inline-block h-5 w-5 text-gray-400 group-hover:text-gray-500" />
+                      <FiLogOut className="inline-block h-5 w-5 text-dark-400 group-hover:text-primary-500" />
                     </div>
                     <div className="ml-3">
-                      <p className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                      <p className="text-sm font-medium text-dark-500 group-hover:text-primary-600">
                         Sign Out
                       </p>
                     </div>
@@ -197,10 +201,10 @@ export default function DashboardLayout({
       </div>
 
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
-        <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow md:hidden">
+        <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow-soft md:hidden">
           <button
             type="button"
-            className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 md:hidden"
+            className="px-4 border-r border-gray-200 text-dark-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 md:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <span className="sr-only">Open sidebar</span>
@@ -208,14 +212,14 @@ export default function DashboardLayout({
           </button>
           <div className="flex-1 px-4 flex justify-between">
             <div className="flex-1 flex items-center">
-              <h1 className="text-xl font-bold text-primary-600 md:hidden">NextProp.ai</h1>
+              <h1 className="text-xl font-bold text-primary-600 font-display md:hidden">NextProp.ai</h1>
             </div>
           </div>
         </div>
 
-        <main className="flex-1 relative overflow-y-auto focus:outline-none">
-          <div className="py-6">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        <main className="flex-1 relative overflow-y-auto focus:outline-none bg-gray-50">
+          <div className="py-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               {children}
             </div>
           </div>
