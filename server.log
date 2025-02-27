@@ -1,0 +1,54 @@
+
+> nextprop-client@1.0.0 dev
+> next dev
+
+ ⚠ Port 3000 is in use, trying 3001 instead.
+  ▲ Next.js 14.2.24
+  - Local:        http://localhost:3001
+  - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 1287ms
+ ✓ Compiled /api/zillow-search in 122ms (57 modules)
+Starting single search with params: {
+  location: 'San Francisco, CA',
+  homeType: undefined,
+  listingCategory: undefined,
+  daysOnZillow: undefined
+}
+Searching Zillow with params: {
+  location: 'San Francisco, CA',
+  homeType: undefined,
+  listingCategory: undefined,
+  daysOnZillow: undefined
+}
+Using Zillow search URL: https://www.zillow.com/homes/for_sale/San%20Francisco%2C%20CA
+Search initiated with snapshot ID: s_m7njifym25sb7spq03
+Checking status for snapshot ID: s_m7njifym25sb7spq03
+Snapshot s_m7njifym25sb7spq03 status: running
+Checking status for snapshot ID: s_m7njifym25sb7spq03
+Snapshot s_m7njifym25sb7spq03 status: ready
+Fetching data for completed snapshot: s_m7njifym25sb7spq03
+Error fetching snapshot data: Error: Failed to get snapshot data: 400 Snapshot is empty
+    at getSnapshotData (webpack-internal:///(rsc)/./src/lib/zillow-api.ts:148:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async POST (webpack-internal:///(rsc)/./src/app/api/zillow-search/route.ts:140:30)
+    at async /Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:57228
+    at async eT.execute (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:46851)
+    at async eT.handle (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:6:58760)
+    at async doRender (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/base-server.js:1366:42)
+    at async cacheEntry.responseCache.get.routeKind (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/base-server.js:1588:28)
+    at async DevServer.renderToResponseWithComponentsImpl (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/base-server.js:1496:28)
+    at async DevServer.renderPageComponent (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/base-server.js:1924:24)
+    at async DevServer.renderToResponseImpl (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/base-server.js:1962:32)
+    at async DevServer.pipeImpl (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/base-server.js:922:25)
+    at async NextNodeServer.handleCatchallRenderRequest (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/next-server.js:272:17)
+    at async DevServer.handleRequestImpl (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/base-server.js:818:17)
+    at async /Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/dev/next-dev-server.js:339:20
+    at async Span.traceAsyncFn (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/trace/trace.js:154:20)
+    at async DevServer.handleRequest (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/dev/next-dev-server.js:336:24)
+    at async invokeRender (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/lib/router-server.js:178:21)
+    at async handleRequest (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/lib/router-server.js:355:24)
+    at async requestHandlerImpl (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/lib/router-server.js:379:13)
+    at async Server.requestListener (/Users/almog/GIT/ghltest/nextprop-client/node_modules/next/dist/server/lib/start-server.js:141:13)
+ POST /api/zillow-search 500 in 5568ms

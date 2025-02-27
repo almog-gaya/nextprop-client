@@ -18,6 +18,7 @@ import {
   FiTarget
 } from 'react-icons/fi'
 import { useAuth } from '@/lib/hooks/useAuth'
+import DebugZillowSearch from '@/components/DebugZillowSearch'
 
 export default function DashboardLayout({
   children,
@@ -225,6 +226,9 @@ export default function DashboardLayout({
           </div>
         </main>
       </div>
+
+      {/* Add Debug Zillow Search Component */}
+      <DebugZillowSearch />
     </div>
   )
 } 
