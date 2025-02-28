@@ -2,165 +2,130 @@
  * Go High Level API Utility Functions
  * 
  * This file contains utility functions for interacting with the Go High Level API.
- * It leverages the access token obtained through NextAuth's OAuth flow.
+ * It leverages the access token obtained through our authentication system.
  */
+import { getWithAuth, postWithAuth, putWithAuth, deleteWithAuth } from './api';
 
 // API Base URLs
 const API_1_0_BASE_URL = "https://rest.gohighlevel.com/v1";
 const API_2_0_BASE_URL = "https://services.leadconnectorhq.com";
 
+// Default API headers
+const DEFAULT_HEADERS = {
+  'Version': '2023-07-01',
+  'Content-Type': 'application/json'
+};
+
+// Type definitions for API responses
+export interface LocationsResponse {
+  locations: Location[];
+}
+
+export interface PipelinesResponse {
+  pipelines: Pipeline[];
+}
+
+export interface OpportunitiesResponse {
+  opportunities: Opportunity[];
+}
+
+export interface ContactsResponse {
+  contacts: Contact[];
+}
+
 /**
  * Get all locations for the authenticated user
  */
-export async function getLocations(accessToken: string) {
-  const response = await fetch(`${API_2_0_BASE_URL}/locations/v1`, {
+export async function getLocations(accessToken: string): Promise<LocationsResponse> {
+  return getWithAuth<LocationsResponse>(`${API_2_0_BASE_URL}/locations/v1`, {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
-      'Version': '2023-07-01',
-      'Content-Type': 'application/json'
+      ...DEFAULT_HEADERS
     }
   });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch locations: ${response.status}`);
-  }
-
-  return response.json();
 }
 
 /**
  * Get details for a specific location
  */
-export async function getLocationDetails(accessToken: string, locationId: string) {
-  const response = await fetch(`${API_2_0_BASE_URL}/locations/v1/${locationId}`, {
+export async function getLocationDetails(accessToken: string, locationId: string): Promise<Location> {
+  return getWithAuth<Location>(`${API_2_0_BASE_URL}/locations/v1/${locationId}`, {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
-      'Version': '2023-07-01',
-      'Content-Type': 'application/json'
+      ...DEFAULT_HEADERS
     }
   });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch location details: ${response.status}`);
-  }
-
-  return response.json();
 }
 
 /**
  * Create a new location (subaccount)
  */
-export async function createLocation(accessToken: string, locationData: any) {
-  const response = await fetch(`${API_2_0_BASE_URL}/locations/v1`, {
-    method: 'POST',
+export async function createLocation(accessToken: string, locationData: Partial<Location>): Promise<Location> {
+  return postWithAuth<Location>(`${API_2_0_BASE_URL}/locations/v1`, locationData, {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
-      'Version': '2023-07-01',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(locationData)
+      ...DEFAULT_HEADERS
+    }
   });
-
-  if (!response.ok) {
-    throw new Error(`Failed to create location: ${response.status}`);
-  }
-
-  return response.json();
 }
 
 /**
  * Get all contacts for a location
  */
-export async function getContacts(accessToken: string, locationId: string) {
-  const response = await fetch(`${API_2_0_BASE_URL}/contacts/v1?locationId=${locationId}`, {
+export async function getContacts(accessToken: string, locationId: string): Promise<ContactsResponse> {
+  return getWithAuth<ContactsResponse>(`${API_2_0_BASE_URL}/contacts/v1?locationId=${locationId}`, {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
-      'Version': '2023-07-01',
-      'Content-Type': 'application/json'
+      ...DEFAULT_HEADERS
     }
   });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch contacts: ${response.status}`);
-  }
-
-  return response.json();
 }
 
 /**
  * Get all pipelines for a location
  */
-export async function getPipelines(accessToken: string, locationId: string) {
-  const response = await fetch(`${API_2_0_BASE_URL}/pipelines/v1?locationId=${locationId}`, {
+export async function getPipelines(accessToken: string, locationId: string): Promise<PipelinesResponse> {
+  return getWithAuth<PipelinesResponse>(`${API_2_0_BASE_URL}/pipelines/v1?locationId=${locationId}`, {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
-      'Version': '2023-07-01',
-      'Content-Type': 'application/json'
+      ...DEFAULT_HEADERS
     }
   });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch pipelines: ${response.status}`);
-  }
-
-  return response.json();
 }
 
 /**
  * Get all opportunities for a pipeline
  */
-export async function getOpportunities(accessToken: string, pipelineId: string) {
-  const response = await fetch(`${API_2_0_BASE_URL}/opportunities/v1?pipelineId=${pipelineId}`, {
+export async function getOpportunities(accessToken: string, pipelineId: string): Promise<OpportunitiesResponse> {
+  return getWithAuth<OpportunitiesResponse>(`${API_2_0_BASE_URL}/opportunities/v1?pipelineId=${pipelineId}`, {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
-      'Version': '2023-07-01',
-      'Content-Type': 'application/json'
+      ...DEFAULT_HEADERS
     }
   });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch opportunities: ${response.status}`);
-  }
-
-  return response.json();
 }
 
 /**
  * Create a new opportunity in a pipeline
  */
-export async function createOpportunity(accessToken: string, opportunityData: any) {
-  const response = await fetch(`${API_2_0_BASE_URL}/opportunities/v1`, {
-    method: 'POST',
+export async function createOpportunity(accessToken: string, opportunityData: Partial<Opportunity>): Promise<Opportunity> {
+  return postWithAuth<Opportunity>(`${API_2_0_BASE_URL}/opportunities/v1`, opportunityData, {
     headers: {
       'Authorization': `Bearer ${accessToken}`,
-      'Version': '2023-07-01',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(opportunityData)
+      ...DEFAULT_HEADERS
+    }
   });
-
-  if (!response.ok) {
-    throw new Error(`Failed to create opportunity: ${response.status}`);
-  }
-
-  return response.json();
 }
 
 /**
  * Get user information
  */
-export async function getUserInfo(accessToken: string) {
-  const response = await fetch(`${API_2_0_BASE_URL}/oauth/user`, {
+export async function getUserInfo(accessToken: string): Promise<any> {
+  return getWithAuth<any>(`${API_2_0_BASE_URL}/oauth/user`, {
     headers: {
       'Authorization': `Bearer ${accessToken}`
     }
   });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch user info: ${response.status}`);
-  }
-
-  return response.json();
 }
 
 export interface Location {
@@ -261,7 +226,7 @@ export class GHLApi {
     return data.opportunities
   }
 
-  async createOpportunity(opportunityData: any): Promise<Opportunity> {
+  async createOpportunity(opportunityData: Partial<Opportunity>): Promise<Opportunity> {
     return createOpportunity(this.accessToken, opportunityData)
   }
 

@@ -4,7 +4,7 @@ import { cookies } from 'next/headers'
 // Go High Level OAuth credentials
 const CLIENT_ID = process.env.GHL_CLIENT_ID || ''
 const CLIENT_SECRET = process.env.GHL_CLIENT_SECRET || ''
-const REDIRECT_URI = process.env.GHL_REDIRECT_URI || 'http://localhost:3000/api/auth/callback/gohighlevel'
+const REDIRECT_URI = process.env.GHL_REDIRECT_URI || 'http://localhost:3000/api/auth/callback'
 
 // OAuth endpoints
 const TOKEN_ENDPOINT = 'https://services.leadconnectorhq.com/oauth/token'
@@ -15,7 +15,7 @@ const USER_ENDPOINT = 'https://services.leadconnectorhq.com/oauth/userinfo'
  */
 export async function GET(request: NextRequest) {
   try {
-    console.log('OAuth callback received at /api/auth/callback/gohighlevel')
+    console.log('OAuth callback received')
     
     // Get the authorization code from the URL
     const { searchParams } = new URL(request.url)

@@ -1,45 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getAbsoluteUrl } from '@/lib/utils'
 
 // Go High Level OAuth credentials
-const CLIENT_ID = process.env.GHL_CLIENT_ID
-const CLIENT_SECRET = process.env.GHL_CLIENT_SECRET
-// Use dynamic redirect URI based on environment
-const REDIRECT_URI = process.env.GHL_REDIRECT_URI || getAbsoluteUrl('/api/auth/callback/gohighlevel')
+const CLIENT_ID = process.env.GHL_CLIENT_ID || ''
+const CLIENT_SECRET = process.env.GHL_CLIENT_SECRET || ''
+const REDIRECT_URI = process.env.GHL_REDIRECT_URI || 'http://localhost:3000/api/auth/callback/gohighlevel'
 
 // OAuth endpoints
-// Using the chooselocation endpoint as shown in the test scripts
-const AUTHORIZATION_URL = 'https://marketplace.gohighlevel.com/oauth/chooselocation'
-const TOKEN_URL = 'https://services.leadconnectorhq.com/oauth/token'
-const USERINFO_URL = 'https://services.leadconnectorhq.com/oauth/userinfo'
+const AUTHORIZE_ENDPOINT = 'https://marketplace.gohighlevel.com/oauth/chooselocation'
 
-// Scopes for the OAuth request
-const SCOPES = 'businesses.readonly contacts.readonly opportunities.readonly opportunities.write'
+// OAuth scope - ensure no extra spaces and proper formatting
+const SCOPE = 'contacts/readonly contacts/write locations/readonly opportunities/readonly opportunities/write pipelines/readonly'
 
 /**
- * GET handler for initiating the OAuth flow
+ * GET handler to initiate the OAuth flow
  */
 export async function GET(request: NextRequest) {
   try {
-    console.log('Starting Go High Level OAuth flow...')
-    console.log('Client ID:', CLIENT_ID)
-    console.log('Redirect URI:', REDIRECT_URI)
+    console.log('Initiating GoHighLevel OAuth flow')
+    console.log('Using redirect URI:', REDIRECT_URI)
+    console.log('Using client ID:', CLIENT_ID)
     
-    // Ensure CLIENT_ID is treated as a string
-    if (!CLIENT_ID || typeof CLIENT_ID !== 'string') {
-      throw new Error('Invalid CLIENT_ID: Must be a string')
+    if (!CLIENT_ID) {
+      console.error('Missing GHL_CLIENT_ID environment variable')
+      return NextResponse.redirect(new URL('/?error=Missing+GoHighLevel+client+ID', request.url))
     }
     
-    // Generate the authorization URL
-    // Using the chooselocation endpoint which is the correct one according to the test scripts
-    const authUrl = `${AUTHORIZATION_URL}?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&scope=${SCOPES}`
+    // Generate the authorization URL exactly as in the documentation
+    const authUrl = new URL(AUTHORIZE_ENDPOINT)
+    authUrl.searchParams.append('response_type', 'code')
+    authUrl.searchParams.append('client_id', CLIENT_ID)
+    authUrl.searchParams.append('redirect_uri', REDIRECT_URI)
+    authUrl.searchParams.append('scope', SCOPE)
     
-    console.log('Authorization URL:', authUrl)
+    // Add state parameter for security
+    const state = Math.random().toString(36).substring(2, 15)
+    authUrl.searchParams.append('state', state)
+    
+    console.log('Redirecting to GoHighLevel authorization URL:', authUrl.toString())
     
     // Redirect the user to the authorization URL
-    return NextResponse.redirect(authUrl)
+    return NextResponse.redirect(authUrl.toString())
   } catch (error) {
-    console.error('Error in Go High Level OAuth route:', error)
-    return NextResponse.json({ error: 'Failed to initiate OAuth flow' }, { status: 500 })
+    console.error('Error initiating GoHighLevel OAuth flow:', error)
+    return NextResponse.redirect(new URL('/?error=Failed+to+initiate+authentication', request.url))
   }
 } 

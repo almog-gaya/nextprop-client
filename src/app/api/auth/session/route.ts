@@ -9,8 +9,8 @@ export async function GET(request: NextRequest) {
     const cookieStore = cookies()
     
     // Get the user data from cookies
-    const userCookie = cookieStore.get('ghl_user')
-    const accessTokenCookie = cookieStore.get('ghl_access_token')
+    const userCookie = cookieStore.get('user')
+    const accessTokenCookie = cookieStore.get('access_token')
     
     if (!userCookie || !accessTokenCookie) {
       return NextResponse.json({ user: null })

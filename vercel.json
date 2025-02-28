@@ -7,8 +7,8 @@
   "outputDirectory": ".next",
   "env": {
     "NODE_ENV": "production",
-    "NEXTAUTH_URL": "https://ghl-almog-gaya-almog-gayas-projects.vercel.app",
-    "GHL_REDIRECT_URI": "https://ghl-almog-gaya-almog-gayas-projects.vercel.app/api/auth/callback/gohighlevel"
+    "NEXTAUTH_URL": "https://nextpropai.netlify.app",
+    "GHL_REDIRECT_URI": "https://nextpropai.netlify.app/api/auth/callback/gohighlevel"
   },
   "headers": [
     {
@@ -31,8 +31,8 @@
   ],
   "build": {
     "env": {
-      "NEXTAUTH_URL": "https://ghl-almog-gaya-almog-gayas-projects.vercel.app",
-      "GHL_REDIRECT_URI": "https://ghl-almog-gaya-almog-gayas-projects.vercel.app/api/auth/callback/gohighlevel"
+      "NEXTAUTH_URL": "https://nextpropai.netlify.app",
+      "GHL_REDIRECT_URI": "https://nextpropai.netlify.app/api/auth/callback/gohighlevel"
     }
   }
-} 
+}

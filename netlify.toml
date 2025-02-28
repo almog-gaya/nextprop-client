@@ -5,6 +5,9 @@
 [build.environment]
   NODE_VERSION = "18"
   NPM_FLAGS = "--no-optional"
+  NODE_ENV = "production"
+  NEXTAUTH_URL = "https://nextpropai.netlify.app"
+  GHL_REDIRECT_URI = "https://nextpropai.netlify.app/api/auth/callback/gohighlevel"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs" 

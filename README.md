@@ -43,7 +43,7 @@ NEXTAUTH_SECRET=your-production-secret-key
 
 GHL_CLIENT_ID=your-ghl-client-id
 GHL_CLIENT_SECRET=your-ghl-client-secret
-GHL_REDIRECT_URI=https://your-production-domain.vercel.app/api/auth/callback/gohighlevel
+GHL_REDIRECT_URI=https://your-production-domain.vercel.app/api/auth/callback
 
 GHL_API_KEY=your-ghl-api-key
 GHL_AGENCY_API_TOKEN=your-ghl-agency-api-token
@@ -60,7 +60,7 @@ Replace `your-production-domain.vercel.app` with your actual Vercel deployment U
    - Log in to your Go High Level account
    - Navigate to Settings > Developer Portal
    - Select your OAuth application
-   - Update the Redirect URI to your production URL (e.g., `https://your-production-domain.vercel.app/api/auth/callback/gohighlevel`)
+   - Update the Redirect URI to your production URL (e.g., `https://your-production-domain.vercel.app/api/auth/callback`)
    - Save your changes
 
 2. **Secure Your Secrets**: Ensure that your production secrets are different from development and are kept secure.

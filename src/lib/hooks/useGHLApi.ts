@@ -1,27 +1,27 @@
-import { useSession } from 'next-auth/react'
+import { useAuth } from './useAuth'
 import { GHLApi } from '../ghl-api'
 import { useEffect, useState } from 'react'
 
 /**
  * Custom hook to use the Go High Level API in components
- * This hook automatically uses the access token from the session
+ * This hook automatically uses the access token from our authentication system
  */
 export function useGHLApi() {
-  const { data: session, status } = useSession()
+  const { accessToken, isAuthenticated, isLoading } = useAuth()
   const [api, setApi] = useState<GHLApi | null>(null)
 
   useEffect(() => {
-    if (status === 'authenticated' && session?.accessToken) {
-      setApi(new GHLApi(session.accessToken))
+    if (isAuthenticated && accessToken) {
+      setApi(new GHLApi(accessToken))
     } else {
       setApi(null)
     }
-  }, [session, status])
+  }, [accessToken, isAuthenticated])
 
   return {
     api,
-    isLoading: status === 'loading',
-    isAuthenticated: status === 'authenticated',
+    isLoading,
+    isAuthenticated,
   }
 }
 

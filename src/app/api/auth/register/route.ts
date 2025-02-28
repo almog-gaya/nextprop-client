@@ -170,24 +170,27 @@ export async function POST(request: NextRequest) {
       const cookieStore = cookies()
       
       // Store the user data in cookies
-      cookieStore.set('ghl_user', JSON.stringify({
+      cookieStore.set('user', JSON.stringify({
         id: userData.id,
         name: `${firstName} ${lastName}`,
         email: email,
         locationId: locationId,
+        client_id: String(process.env.GHL_CLIENT_ID || '')
       }), {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 30 * 24 * 60 * 60, // 30 days
         path: '/',
+        sameSite: 'lax'
       })
       
       // Store the location API key as the access token
-      cookieStore.set('ghl_access_token', locationApiKey, {
+      cookieStore.set('access_token', locationApiKey, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 30 * 24 * 60 * 60, // 30 days
         path: '/',
+        sameSite: 'lax'
       })
       
       console.log('User credentials stored in cookies')
