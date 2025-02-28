@@ -2,14 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
 import { useAuth } from '@/lib/hooks/useAuth'
 
 export default function Home() {
-  const { user, isAuthenticated, isLoading, error, signIn } = useAuth()
+  const { user, isAuthenticated, isLoading, signIn } = useAuth()
   const router = useRouter()
   const [showNewUserOption, setShowNewUserOption] = useState(false)
-  const [debugInfo, setDebugInfo] = useState<string | null>(null)
 
   useEffect(() => {
     // If user is authenticated and has a location, redirect to dashboard
@@ -20,61 +18,14 @@ export default function Home() {
     else if (isAuthenticated && !user?.locationId) {
       router.push('/onboarding')
     }
-    
-    // Check for URL error parameters
-    if (typeof window !== 'undefined') {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlError = urlParams.get('error');
-      if (urlError) {
-        setDebugInfo(`Error from URL: ${urlError}`);
-      }
-    }
   }, [user, isAuthenticated, router])
 
   const handleSignIn = () => {
-    console.log('Signing in with Go High Level...')
-    setDebugInfo('Initiating sign-in process...')
-    
-    try {
-      // Try direct navigation first
-      window.location.href = '/api/auth/gohighlevel'
-      
-      // Set a fallback timeout in case the redirect doesn't happen
-      setTimeout(() => {
-        setDebugInfo('Redirect timeout - trying alternative method...')
-        // Try fetch as a fallback
-        fetch('/api/auth/gohighlevel')
-          .then(response => {
-            if (response.redirected) {
-              window.location.href = response.url
-            } else {
-              setDebugInfo(`API responded but no redirect. Status: ${response.status}`)
-            }
-          })
-          .catch(err => {
-            setDebugInfo(`Fetch error: ${err.message}`)
-            // Last resort - try the signIn from useAuth
-            signIn()
-          })
-      }, 1000)
-    } catch (error) {
-      console.error('Error during sign-in:', error)
-      setDebugInfo(`Sign-in error: ${error instanceof Error ? error.message : 'Unknown error'}`)
-      // Try the hook's signIn as a fallback
-      signIn()
-    }
+    window.location.href = '/api/auth/gohighlevel'
   }
 
   const handleNewUser = () => {
-    console.log('Creating new account, navigating to /register...')
-    try {
-      router.push('/register')
-    } catch (error) {
-      console.error('Navigation error:', error)
-      setDebugInfo(`Navigation error: ${error instanceof Error ? error.message : 'Unknown error'}`)
-      // Fallback to window.location if router fails
-      window.location.href = '/register'
-    }
+    router.push('/register')
   }
 
   return (
@@ -113,130 +64,46 @@ export default function Home() {
         </div>
 
         <div className="flex flex-col items-center gap-4">
-          {error && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 max-w-md w-full">
-              <p className="font-bold">Authentication Error</p>
-              <p>{error}</p>
-            </div>
-          )}
-          
-          {debugInfo && (
-            <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded mb-4 max-w-md w-full">
-              <p className="font-bold">Debug Info</p>
-              <p>{debugInfo}</p>
-              {/* Add direct link as fallback */}
-              <p className="mt-2">
-                If the sign-in button doesn't work, try{' '}
-                <a 
-                  href="/api/auth/gohighlevel" 
-                  className="text-blue-800 underline font-semibold"
-                >
-                  clicking here
-                </a>
-              </p>
-            </div>
-          )}
-          
           {isLoading ? (
-            <div className="flex flex-col items-center gap-4">
-              <div className="flex items-center justify-center mb-4">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
-                <span className="ml-2">Loading...</span>
-              </div>
-              
-              {/* Show sign-in button even during loading for better UX */}
-              <button
-                onClick={handleSignIn}
-                className="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors"
-              >
-                Sign In with Go High Level
-              </button>
-              <p className="text-gray-500 text-sm">
-                Don't have a Go High Level account?{' '}
-                <button
-                  onClick={handleNewUser}
-                  className="text-primary-600 hover:text-primary-700 font-semibold"
-                >
-                  Create a new account
-                </button>
-              </p>
-              <p className="text-gray-500 text-sm mt-2">
-                Having trouble signing in?{' '}
-                <a 
-                  href="/api/auth/gohighlevel" 
-                  className="text-primary-600 hover:text-primary-700 font-semibold"
-                >
-                  Click here to sign in directly
-                </a>
-              </p>
+            <div className="flex items-center justify-center mb-4">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-600"></div>
+              <span className="ml-2">Loading...</span>
             </div>
           ) : !showNewUserOption ? (
-            <>
+            <div className="flex flex-col items-center gap-4">
               <button
                 onClick={handleSignIn}
-                className="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors"
-                disabled={isLoading}
+                className="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors w-64"
               >
-                Sign In with Go High Level
+                Sign In
               </button>
-              <p className="text-gray-500 text-sm">
-                Don't have a Go High Level account?{' '}
-                <button
-                  onClick={handleNewUser}
-                  className="text-primary-600 hover:text-primary-700 font-semibold"
-                >
-                  Create a new account
-                </button>
-              </p>
-              <p className="text-gray-500 text-sm mt-2">
-                Having trouble signing in?{' '}
-                <a 
-                  href="/api/auth/gohighlevel" 
-                  className="text-primary-600 hover:text-primary-700 font-semibold"
-                >
-                  Click here to sign in directly
-                </a>
-              </p>
-            </>
-          ) : (
-            <>
-              <div className="flex flex-col gap-4 items-center bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-                <h3 className="text-xl font-semibold">New to Go High Level?</h3>
-                <p className="text-gray-600 text-center">
-                  Create a new account to get started with NextProp.ai and Go High Level.
-                </p>
-                <button
-                  onClick={handleNewUser}
-                  className="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors w-full"
-                >
-                  Create New Account
-                </button>
-                <button
-                  onClick={() => setShowNewUserOption(false)}
-                  className="text-primary-600 hover:text-primary-700 font-semibold"
-                >
-                  Back to Sign In
-                </button>
-              </div>
-            </>
-          )}
-          
-          {/* Development information section */}
-          <div className="mt-8 p-4 border border-gray-200 rounded-lg max-w-md w-full">
-            <h3 className="text-lg font-semibold mb-2">Debug Information</h3>
-            <div className="text-sm text-gray-600">
-              <p>Authentication Status: {isAuthenticated ? 'Authenticated' : 'Not Authenticated'}</p>
-              <p>Loading: {isLoading ? 'Yes' : 'No'}</p>
-              {user && (
-                <div className="mt-2">
-                  <p>User ID: {user.id}</p>
-                  <p>Email: {user.email || 'N/A'}</p>
-                  <p>Location ID: {user.locationId || 'N/A'}</p>
-                  <p>Client ID: {user.client_id || 'N/A'}</p>
-                </div>
-              )}
+              <button
+                onClick={() => setShowNewUserOption(true)}
+                className="bg-white border border-primary-600 text-primary-600 hover:bg-gray-50 font-bold py-3 px-8 rounded-lg text-lg transition-colors w-64"
+              >
+                Register
+              </button>
             </div>
-          </div>
+          ) : (
+            <div className="flex flex-col gap-4 items-center bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+              <h3 className="text-xl font-semibold">Create New Account</h3>
+              <p className="text-gray-600 text-center">
+                Create a new account to get started with NextProp.ai and Go High Level.
+              </p>
+              <button
+                onClick={handleNewUser}
+                className="bg-primary-600 hover:bg-primary-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors w-full"
+              >
+                Register
+              </button>
+              <button
+                onClick={() => setShowNewUserOption(false)}
+                className="text-primary-600 hover:text-primary-700 font-semibold"
+              >
+                Back to Sign In
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </main>
